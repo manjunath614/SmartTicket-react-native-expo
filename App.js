@@ -523,7 +523,24 @@ function StackNavigator () {
       }}
       />
      
-     <Stack.Screen options={{headerStyle:{backgroundColor:darkPink}}} name='AllScreens' component={AllScreens}/>
+     <Stack.Screen options={{headerStyle:{backgroundColor:darkPink},
+
+        headerRight: () => (
+                
+          <View style={{backgroundColor:'pink',justifyContent:'center',alignItems:'center',marginLeft:10,padding:5,borderRadius:20}}>
+          <Ionicons
+            //style={{paddingLeft: 10}}
+            name= 'person-outline'
+            size={40}
+            color='#ffffff'
+            onPress={()=>null}
+          />
+        </View>
+        ),
+     }}
+     
+     
+     name='AllScreens' component={AllScreens}/>
 
      <Stack.Screen options={{headerStyle:{backgroundColor:darkPink}}} name='Cash Handler' component={CashHandler}/>
       
