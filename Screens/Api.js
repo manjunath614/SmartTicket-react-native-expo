@@ -182,9 +182,10 @@ export const ChangePasswordApi = async (data) => {
 
 export const ProfileApi = async (data) => {
   const res = await axios({
-    method:'get',
+    method:'post',
     url:'https://amsweets.in/profile/',
     data:data
   });
   return res;
 }
+

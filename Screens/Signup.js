@@ -8,6 +8,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
 import { searchAxiosApi } from "./Api";
+import dayjs from "dayjs";
 
 
 const SignUp = () =>{
@@ -42,23 +43,38 @@ const SignUp = () =>{
   //   setDatePickerVisibility(false);
   // };
 
-  const handleConfirm = (date) => {
-    setDob(date);     // complete dob of user
-   // console.log(dob);
-    setSelectedDate(date.getDate());   // only date of dob
-    setYear(date.getFullYear());
-    setMonth(date.getMonth()+1);
+  // const handleConfirm = (date) => {
+  //   setDob(date);     // complete dob of user
+  //  // console.log(dob);
+  //   setSelectedDate(date.getDate());   // only date of dob
+  //   setYear(date.getFullYear());
+  //   setMonth(date.getMonth()+1);
     
-   // console.log(selectedDate,year,month);
-    hideDatePicker();
-  };
+  //  // console.log(selectedDate,year,month);
+  //   hideDatePicker();
+  // };
   
 
   const onPressSearch = async () =>{
+    
     setLoading(true);
+    let dob=date.getFullYear() + '-'+ (date.getMonth()+1) + '-' + date.getDate();
+    console.log('emp do',dob );
+    var  dd =date.getDate();
+    var mm =date.getMonth()+1;
+    var yyyy = date.getFullYear();
+
+    if(dd<10){
+      dd='0'+dd;
+    }
+    if(mm<10){
+      mm='0'+mm;
+    }
+    dob = yyyy+'-'+mm+'-'+dd;
+    console.log('after',dob);
     await searchAxiosApi({
         "Mobile":mNumber,
-        "Dob":date.getFullYear() + '-'+ (date.getMonth()+1) + '-' + date.getDate() 
+        "Dob":dob
     })
     .then(res=>{
       console.log('sign s',res.data);
@@ -145,7 +161,7 @@ const SignUp = () =>{
           maximumDate={today}
           value={date}
           mode="date"
-          is24Hour={true}
+          is24Hour={false}
           display="default"
           onChange={onChange}
         />

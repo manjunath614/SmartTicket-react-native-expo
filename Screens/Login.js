@@ -188,7 +188,9 @@ const LekpayLogin = () =>{
             alert('Emp');
             navigation.navigate('AllScreens',{
               ID:res.data.data[0].AuthID,
-              flag:res.data.data[0].Flag
+              flag:res.data.data[0].Flag,
+              mobileNumber:mNumber,
+              password:password
             });
           }
           else if(res.data.data[0].Flag == 'U') {

@@ -5,12 +5,14 @@ import Btn from "../components/Btn";
 import { background, btnColor } from "../components/Constants";
 import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
+import { createUserApi, ProfileApi, searchUserAPi, switchToUserApi } from "../Screens/Api";
 
 const AllScreens =({route}) =>{
-    
+    const [dob,setDob]= useState();
     const id = route.params.ID;
     const Flag = route.params.flag;
-    
+    const mobileNumber = route.params.mobileNumber;
+    const password = route.params.password;
     const navigation = useNavigation();
     const Profile = ()=>{
 navigation.navigate('lekpayProfile');
@@ -29,8 +31,34 @@ const cashHandler=() =>{
     navigation.navigate('Cash Handler');
 
 }
+const switchU = async() =>{
+ await ProfileApi({
+  "flag":Flag,
+  "id":id
+ })
+ .then( async res=>{console.log(res.data)
+  console.log(res.data.EmpDOB)
+  setDob(res.data.EmpDOB);
+  console.log('starting to find user');          /////////////////////////////
+  await searchUserAPi({
+    "Mobile":mobileNumber,
+    "Dob":dob
+
+  })
+  .then(res=>{console.log('finding user',res.data)})
+  .catch(error=>console.log(error))
+  
+
+})
+ .catch(error=>{console.log(error)
+alert(error);
+})
+}
     return(
         <View style={styles.body}>
+          <Text>{mobileNumber}</Text>
+          <Text>{password}</Text>
+          <Text>{dob}</Text>
             <StatusBar hidden={false} style="dark" backgroundColor='#F9E5F3'  />
            
             {/* <Btn
@@ -151,6 +179,11 @@ const cashHandler=() =>{
                 
 
              </View>
+            <TouchableOpacity onPress={switchU}>
+              <Text>Switch to User</Text>
+            </TouchableOpacity>
+              
+            
         </View>
     )
 }
