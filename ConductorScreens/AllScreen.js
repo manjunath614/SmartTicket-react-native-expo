@@ -188,7 +188,7 @@ alert(error);
                 
 
              </View>
-            <TouchableOpacity onPress={switchU}>
+            <TouchableOpacity onPress={switchU} style={{backgroundColor:'red'}}>
               <Text>Switch to User</Text>
             </TouchableOpacity>
               
