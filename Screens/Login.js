@@ -195,7 +195,8 @@ const LekpayLogin = () =>{
           }
           else if(res.data.data[0].Flag == 'U') {
             alert('Login Successful');
-            navigation.navigate('tab');
+            navigation.navigate('tab'
+    ,{screen:"Screen_A",params:{userData:res.data.data[0]}})
           }
 
           else alert('User not exist.')

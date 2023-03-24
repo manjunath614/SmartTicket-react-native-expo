@@ -122,6 +122,7 @@ export const searchUserAPi =async (data) =>{
 }
 
 export const createUserApi = async(data) =>{
+  console.log('startig to create user');
   const res = await axios({
     method:'post',
     url:'https://amsweets.in/user/register',

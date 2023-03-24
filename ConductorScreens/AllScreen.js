@@ -39,13 +39,22 @@ const switchU = async() =>{
  .then( async res=>{console.log(res.data)
   console.log(res.data.EmpDOB)
   setDob(res.data.EmpDOB);
-  console.log('starting to find user');          /////////////////////////////
+  console.log('starting to find user with dob',res.data.EmpDOB);          /////////////////////////////
   await searchUserAPi({
     "Mobile":mobileNumber,
-    "Dob":dob
+    "Dob":res.data.EmpDOB
 
   })
-  .then(res=>{console.log('finding user',res.data)})
+  .then(res=>{console.log('finding user',res.data)
+  if(res.data[0] != undefined){if(res.data[0].Flag == 'U' ){
+    navigation.navigate('tab'
+    ,{screen:"Screen_A",params:{userData:res.data}})
+  }}else if(res.data.data.flag == 'U'){
+    navigation.navigate('tab'
+    ,{screen:"Screen_A",params:{userData:res.data.data}})
+
+  }
+})
   .catch(error=>console.log(error))
   
 

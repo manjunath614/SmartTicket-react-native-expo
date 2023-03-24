@@ -1,19 +1,21 @@
 
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View,Pressable,Image} from 'react-native';
 import PagerView from 'react-native-pager-view';
 
 
 
-export default function Screen_A({navigation}){
-  
+export default function Screen_A({route}){
+  const navigation = useNavigation();
+    const data= route.params.userData;
+
     const onPressHandler = () => {
        navigation.navigate('Login');
     }
     return(
       <View style={styles.body}>
-       
+       {console.log('data in user dashoard',data)}
         <StatusBar  backgroundColor='#f9e5f3' style={{backgroundColor: '#FFFFFF'}}>
 
         </StatusBar>
