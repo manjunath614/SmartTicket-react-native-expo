@@ -35,24 +35,6 @@ const SignUp = () =>{
     const showDatepicker = () => {
       setShowDatePicker(true);
     };
-  // const showDatePicker = () => {
-  //    setDatePickerVisibility(true);
-  // };
-
-  // const hideDatePicker = () => {
-  //   setDatePickerVisibility(false);
-  // };
-
-  // const handleConfirm = (date) => {
-  //   setDob(date);     // complete dob of user
-  //  // console.log(dob);
-  //   setSelectedDate(date.getDate());   // only date of dob
-  //   setYear(date.getFullYear());
-  //   setMonth(date.getMonth()+1);
-    
-  //  // console.log(selectedDate,year,month);
-  //   hideDatePicker();
-  // };
   
 
   const onPressSearch = async () =>{

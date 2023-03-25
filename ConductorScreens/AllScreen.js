@@ -2,7 +2,7 @@ import React, { useState,useEffect } from "react";
 import { View, Text, StyleSheet, Alert,Button,Image, TextInput,TouchableOpacity, ImageBackground} from "react-native";
 import Constants from 'expo-constants';
 import Btn from "../components/Btn";
-import { background, btnColor } from "../components/Constants";
+import { background, btnColor, darkPink } from "../components/Constants";
 import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { createUserApi, ProfileApi, searchUserAPi, switchToUserApi } from "../Screens/Api";
@@ -14,8 +14,17 @@ const AllScreens =({route}) =>{
     const mobileNumber = route.params.mobileNumber;
     const password = route.params.password;
     const navigation = useNavigation();
-    const Profile = ()=>{
-navigation.navigate('lekpayProfile');
+    const Profile = async()=>{
+      await ProfileApi({
+        "flag":Flag,
+        "id":id
+      })
+      .then(res=>{console.log('details in allscreen',res.data)
+      navigation.navigate('lekpayProfile',{data:res.data});
+    })
+      .catch(error=>alert(error));
+
+
     }
     
 const ScannerAsset = () =>{
@@ -188,7 +197,7 @@ alert(error);
                 
 
              </View>
-            <TouchableOpacity onPress={switchU} style={{backgroundColor:'red'}}>
+            <TouchableOpacity onPress={switchU} style={{backgroundColor:btnColor,width:170,height:30,alignItems:'center',justifyContent:'center'}}>
               <Text>Switch to User</Text>
             </TouchableOpacity>
               

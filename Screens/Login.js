@@ -201,7 +201,9 @@ const LekpayLogin = () =>{
 
           else alert('User not exist.')
         })
-        .catch(error=>{console.log(error)})
+        .catch(error=>{console.log(error);
+        
+        alert('Please try again...')})
 
         
       }else if(mNumber.length != 10 || mNumber.length == 0){

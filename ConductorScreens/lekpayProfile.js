@@ -8,21 +8,26 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from "@react-native-picker/picker";
 import Btn from "../components/Btn";
-const LekpayProfile=() =>{
+import { ProfileApi } from "../Screens/Api";
 
+
+const LekpayProfile=({route}) =>{
+ 
   const [gender, setGender] = useState('Unknown');
    const noImage = require('../assets/appLogo.png');
   const [image,setImage]  = useState('');
 const [hasPermission,setHasPermission] = useState(); 
 const [profilepic,setProfilePic] = useState(false);
+const empData = route.params.data;
 
 useEffect(()=>{
+  
   (async()=> {
     const mediaPermission = await ImagePicker.requestMediaLibraryPermissionsAsync();
     setHasPermission(mediaPermission.status ==="granted");
   } 
   )();
- 
+  
 
 },[]);
 
@@ -102,8 +107,9 @@ const removeProfile = ()=>{
 
 
     return ( 
-      <ScrollView style={{backgroundColor:'#F9E5F3' ,flex:1}}>
-        
+      <View style={{backgroundColor:'#F9E5F3' ,flex:1}}>
+       
+       {console.log('empData',empData)}
         <View style={styles.body}>
              <StatusBar hidden={false} style="light" backgroundColor={background}  />
             <Text style={styles.head}>Profile</Text>
@@ -135,97 +141,96 @@ const removeProfile = ()=>{
             </TouchableOpacity> */}
            <View style={styles.parent}>
            <View elevation={5} style={{backgroundColor:background,padding:35,borderRadius:15,
-            width:"85%",}}>
+            width:"75%",}}>
            <View style={styles.container}>
+            <Text style={styles.text}>Name</Text>
             <Field width="100%"
              editable={false}
          placeholder="Name" 
+         value={`: ${empData.EmpName}`}
        // onChangeText={(value)=>setNumber(value)}
             />
             </View>
-            <View style={[styles.container,{height:40},]}>
-            <Picker
-              itemStyle={{height:40}}
-              //selectedValue={gender}
-              selectedValue='Male'
-              onValueChange={(value, index) => setGender(value)}
-              mode="dropdown" // Android only
-              style={styles.picker}
-            >
-              <Picker.Item style={styles.pickerItem} label="Select Gender" value="Unknown" />
-              <Picker.Item style={styles.pickerItem} label="Male" value="Male" />
-              <Picker.Item style={styles.pickerItem} label="Female" value="Female" />
-              <Picker.Item style={styles.pickerItem} label="Others" value="NA" />
-            </Picker>
-
-            </View>
             <View style={styles.container}>
+            <Text style={styles.text}>DOB</Text>
             <Field width="100%"
              editable={false}
-            keyboardType="numeric"
-         placeholder="Mobile Number" 
+         placeholder="DOB" 
+         value={`: ${empData.EmpDOB}`}
+       // onChangeText={(value)=>setNumber(value)}
+            />
+            </View>
+           
+            <View style={styles.container}>
+            <Text style={styles.text}>Mobile</Text>
+            <Field width="100%"
+             editable={false}
+         placeholder="Mobile" 
+         value={`: ${(empData.EmpMobile).toString()}`}
        // onChangeText={(value)=>setNumber(value)}
             />
             </View>
             <View style={styles.container}>
+            <Text style={styles.text}>Address 1</Text>
             <Field width="100%"
              editable={false}
             placeholder="Address line 1" 
             multiline={true}
-            
+            value={`: ${empData.EmpAddr1}`}
           // onChangeText={(value)=>setNumber(value)}
                />
 
             </View>
             <View style={styles.container}>
+            <Text style={styles.text}>Address 2</Text>
             <Field width="100%"
              editable={false}
             placeholder="Address line 2" 
             multiline={true}
-            
+            value={`: ${empData.EmpAddr2}`}
           // onChangeText={(value)=>setNumber(value)}
                />
 
             </View>
             <View style={styles.container}>
+            <Text style={styles.text}>City</Text>
             <Field width="100%"
              editable={false}
             placeholder="City" 
-           
+           value={`: ${empData.EmpCity}`}
             
           // onChangeText={(value)=>setNumber(value)}
                />
 
             </View>
             <View style={styles.container}>
+            <Text style={styles.text}>Pin</Text>
             <Field width="100%"
              editable={false}
             placeholder="Pin-Code" 
            keyboardType='numeric'
-            
+            value={`: ${(empData.EmpPinCode).toString()}`}
           // onChangeText={(value)=>setNumber(value)}
                />
 
             </View>
             <View style={styles.container}>
+            <Text style={styles.text}>Aadhar</Text>
             <Field width="100%"
              editable={false}
             keyboardType="numeric"
          placeholder="Aadhar Number" 
+         value={`: ${(empData.EmpAadhar).toString()}`}
        // onChangeText={(value)=>setNumber(value)}
             />
             </View>
             
             </View>
            </View>
-           <Btn
-            textColor="white"
-            bgColor={btnColor}
-            btnLabel="Save"
-            />
+           
             
         </View>
-        </ScrollView>
+        </View>
     );
 }
 const styles = StyleSheet.create({
@@ -243,6 +248,10 @@ const styles = StyleSheet.create({
        color:'#000000',
       
       },
+      text:{
+        fontSize:12,
+        width:70
+      },
       container:{
         
         flexDirection:'row',
@@ -250,6 +259,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
         borderRadius:8,
         marginBottom:10,
+        
       },
       parent:{
         alignItems: 'flex-start',
@@ -284,21 +294,7 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
        // marginVertical: 10
     },
-    picker: {
-      
-      alignSelf:'center',
-      width: "100%",
-      height:40,
- 
    
-      
-    },
-    pickerItem:{
-      //backgroundColor:'gold',
-      width:40, 
-      height:40,
-      fontSize:12         
-    },
     
 });
 export default LekpayProfile;
