@@ -186,11 +186,12 @@ const LekpayLogin = () =>{
           }
           else if(res.data.data[0].Flag == 'E'){
             alert('Emp');
+            
             navigation.navigate('AllScreens',{
               ID:res.data.data[0].AuthID,
               flag:res.data.data[0].Flag,
               mobileNumber:mNumber,
-              password:password
+              Type:res.data.data[0].Type,
             });
           }
           else if(res.data.data[0].Flag == 'U') {

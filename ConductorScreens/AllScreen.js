@@ -12,7 +12,7 @@ const AllScreens =({route}) =>{
     const id = route.params.ID;
     const Flag = route.params.flag;
     const mobileNumber = route.params.mobileNumber;
-    const password = route.params.password;
+    const Type = route.params.Type;
     const navigation = useNavigation();
     const Profile = async()=>{
       await ProfileApi({
@@ -74,48 +74,12 @@ alert(error);
 }
     return(
         <View style={styles.body}>
-          <Text>{mobileNumber}</Text>
-          <Text>{password}</Text>
-          <Text>{dob}</Text>
+          
+         <Text>{Type}</Text>
+          
             <StatusBar hidden={false} style="dark" backgroundColor='#F9E5F3'  />
            
-            {/* <Btn
-            
-             textColor="white"
-             bgColor={btnColor}
-             btnLabel="Go to Profile"
-             Press={Profile}
-            /> */}
-             {/* <Btn
-             textColor="white"
-             bgColor={btnColor}
-             btnLabel="Issue Tickets"
-             Press={issueTickets}
-            /> */}
-            {/* <Btn
-             textColor="white"
-             bgColor={btnColor}
-             btnLabel="Asset Capture"
-             Press={ScannerAsset}
-            /> */}
-            
-            {/* <Btn
-             textColor="white"
-             bgColor={btnColor}
-             btnLabel="Go to Validate"
-             Press={checkTickets}
-            /> */}
-           
-           
-           
-            {/* <Btn
-             textColor="white"
-             bgColor={btnColor}
-             btnLabel="Go to Cash Handler"
-           
-            /> */}
-             <Text>Conductor Screens</Text>
-            <View style={styles.card}> 
+           { (Type == 'Conductor') ?   <View style={styles.card}> 
             
             <TouchableOpacity onPress={Profile}>
             <Image style={styles.icon} resizeMode='contain'
@@ -157,46 +121,52 @@ alert(error);
             <Image style={styles.icon} resizeMode='contain'
             source={require('../assets/LekPay-ResetPwd.png')}
             />
-            <Text style={styles.text}>Password</Text>
+          <Text style={styles.text}>Password</Text>
            </TouchableOpacity>
-            </View>
+            </View> 
+            
+          :  <View style={styles.card}>
+          <TouchableOpacity onPress={()=>navigation.navigate('Map Asset')}>
+          <Image style={styles.icon} resizeMode='contain'
+          source={require('../assets/LekPay-Asset.png')}
+          />
+          <Text style={styles.text}>Asset</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={Profile}>
+          <Image style={styles.icon} resizeMode='contain'
+          source={require('../assets/LekPay-Profile.png')}
+          />
+          <Text style={styles.text}>Profile</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={()=>navigation.navigate('Report')}>
+          <Image style={styles.icon} resizeMode='contain'
+          source={require('../assets/LekPay-Report.png')}
+          />
+          <Text style={styles.text}>Report</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={()=>navigation.navigate('Check')}>
+          <Image style={styles.icon} resizeMode='contain'
+          source={require('../assets/LekPay-CheckTicket.png')}
+          />
+          <Text style={styles.text}>Validate</Text>
+          </TouchableOpacity>
+
+          
+
+       </View>
+          }
+            {/* <Text>Conductor Screens</Text> */}
+             
+          
 
 
-             <Text>Checker Screens</Text>
+             {/* <Text>Checker Screens</Text> */}
 
 
-             <View style={styles.card}>
-                <TouchableOpacity onPress={()=>navigation.navigate('Map Asset')}>
-                <Image style={styles.icon} resizeMode='contain'
-                source={require('../assets/LekPay-Asset.png')}
-                />
-                <Text style={styles.text}>Asset</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={()=>navigation.navigate('Profile')}>
-                <Image style={styles.icon} resizeMode='contain'
-                source={require('../assets/LekPay-Profile.png')}
-                />
-                <Text style={styles.text}>Profile</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={()=>navigation.navigate('Report')}>
-                <Image style={styles.icon} resizeMode='contain'
-                source={require('../assets/LekPay-Report.png')}
-                />
-                <Text style={styles.text}>Report</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={()=>navigation.navigate('Check')}>
-                <Image style={styles.icon} resizeMode='contain'
-                source={require('../assets/LekPay-CheckTicket.png')}
-                />
-                <Text style={styles.text}>Validate</Text>
-                </TouchableOpacity>
-
-                
-
-             </View>
+             
             <TouchableOpacity onPress={switchU} style={{backgroundColor:btnColor,width:170,height:30,alignItems:'center',justifyContent:'center'}}>
               <Text>Switch to User</Text>
             </TouchableOpacity>
