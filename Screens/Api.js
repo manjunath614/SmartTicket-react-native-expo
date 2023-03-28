@@ -190,3 +190,11 @@ export const ProfileApi = async (data) => {
   return res;
 }
 
+export const EditprofileApi = async (data) =>{
+  const res = await axios({
+    method:'Post',
+    url:'https://amsweets.in/profile/edit',
+    data:data
+  });
+  return res;
+}

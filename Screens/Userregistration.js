@@ -8,10 +8,17 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from "@react-native-picker/picker";
 import Btn from "../components/Btn";
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
+
 import { useNavigation } from "@react-navigation/native";
 import { ProfileApi } from "./Api";
-const Userregistration=() =>{
+
+
+const Userregistration=({route}) =>{
+
+  const Data = route.params.data;
+  console.log('profile screen data',Data);
+ const [profile,setProfile] = useState({});
   const navigation = useNavigation('');
   const [name,setName] = useState('');
   const [gender, setGender] = useState('Unknown');
@@ -19,37 +26,44 @@ const Userregistration=() =>{
   const [image,setImage]  = useState('');
 const [hasPermission,setHasPermission] = useState(); 
 const [profilepic,setProfilePic] = useState(false);
-const [selectedDate, setSelectedDate] = useState('');
-    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-    const [dob,setDob] = useState('');
-    var date = new Date();
-    const [year,setYear] = useState('');
-    const [month,setMonth] = useState('');
+
+const today = new Date();
+const [date, setDate] = useState(new Date());
+const [showDatePicker, setShowDatePicker] = useState(false);
+
+const onChange = (event, selectedDate) => {
+  const currentDate = selectedDate;
+  setShowDatePicker(Platform.OS === 'ios');
+  setDate(currentDate);
+  console.log('selected',currentDate);
+  let dob=currentDate.getFullYear() + '-'+ (currentDate.getMonth()+1) + '-' + currentDate.getDate();
+    console.log('emp do',dob );
+    var  dd =currentDate.getDate();
+    var mm =currentDate.getMonth()+1;
+    var yyyy = currentDate.getFullYear();
+
+    if(dd<10){
+      dd='0'+dd;
+    }
+    if(mm<10){
+      mm='0'+mm;
+    }
+    dob = yyyy+'-'+mm+'-'+dd;
+    console.log('after',dob);
+};
+
+const showDatepicker = () => {
+  setShowDatePicker(true);
+};
 
     const onPressHandler = () => {
-      navigation.navigate('Screen_C');
+      navigation.navigate('Edit Profile',{data:Data});
     }
-    const showDatePicker = () => {
-      setDatePickerVisibility(true);
-    };
-  
-    const hideDatePicker = () => {
-      setDatePickerVisibility(false);
-    };
-
-    const handleConfirm = (date) => {
-      setDob(date);     // complete dob of user
-      //console.log(dob);
-      setSelectedDate(date.getDate());   // only date of dob
-      setYear(date.getFullYear());
-      setMonth(date.getMonth()+1);
-      
-     // console.log(selectedDate,year,month);
-      hideDatePicker();
-    };
+    
   
 
 useEffect(()=>{
+  
   (async()=> {
     const mediaPermission = await ImagePicker.requestMediaLibraryPermissionsAsync();
     setHasPermission(mediaPermission.status ==="granted");
@@ -59,6 +73,7 @@ useEffect(()=>{
   
 
 },[]);
+
 
 
 if(hasPermission === undefined){
@@ -76,7 +91,7 @@ if(hasPermission === undefined){
 
 
 const pickImage= async () =>{
- 
+  
    let result= await ImagePicker.launchImageLibraryAsync({
     mediaTypes:ImagePicker.MediaTypeOptions.Images,
     aspect:[4,3],
@@ -139,10 +154,11 @@ const removeProfile = ()=>{
       <ScrollView style={{backgroundColor:'#F9E5F3' ,flex:1}}>
         
         <View style={styles.body}>
+         {console.log(Data.Uphoto)}
              <StatusBar hidden={false} style="light" backgroundColor='#f9e5f3'  />
             <Text style={styles.head}>Profile</Text>
             
-             { !profilepic?  
+             { (Data.Uphoto == '')?  
             <View>
            <Image
               style={styles.image}
@@ -151,12 +167,12 @@ const removeProfile = ()=>{
               source={require('../assets/Noimage.png')}
               
              />  
-              <View style={{backgroundColor:'pink',position:'absolute',right:1,bottom:1,padding:11,borderRadius:100}}><Ionicons name='camera' size={28} color="black" onPress={openDialog}/></View>
+              
            </View>
        :
             
-            image && <View><Image resizeMode='contain' source={{uri:image}} style={styles.image}/>
-             <View style={{backgroundColor:'pink',position:'absolute',right:1,bottom:1,padding:11,borderRadius:100}}><Ionicons name='camera' size={28} color="black" onPress={openDialog}/></View>
+            Data.Uphoto && <View><Image resizeMode='contain' source={{uri:Data.Uphoto}} style={styles.image}/>
+             
             </View>
 
             } 
@@ -169,36 +185,39 @@ const removeProfile = ()=>{
             </TouchableOpacity> */}
            <View style={styles.parent}>
            <View elevation={5} style={{backgroundColor:background,padding:35,borderRadius:15,
-            width:"85%",}}>
+            width:"70%",}}>
            <View style={styles.container}>
-            
+            <Text style={styles.text}>Name</Text>
             <Field
              width="100%"
-             value={name}
+             value={`: ${(Data.Uname)}`}
              editable={true}
              placeholder="Name" 
-          // onChangeText={(value)=>setName(value)}
+           onChangeText={(value)=>setName(value)}
             />
             </View>
             <View style={[styles.container,{height:40},]}>
-            
+            <Text style={styles.text}>Gender</Text>
             { <Picker
               itemStyle={{height:40}}
-              selectedValue={gender}
+              value={`: ${(Data.Ugender)}`}
+              selectedValue={Data.Ugender}
               //selectedValue='Male'
               onValueChange={(value, index) => setGender(value)}
               mode="dropdown" // Android only
               style={styles.picker}
             >
               <Picker.Item style={styles.pickerItem} label="Select Gender" value="Unknown" />
-              <Picker.Item style={styles.pickerItem} label="Male" value="Male" />
-              <Picker.Item style={styles.pickerItem} label="Female" value="Female" />
-              <Picker.Item style={styles.pickerItem} label="Others" value="NA" />
+              <Picker.Item style={styles.pickerItem} label=": Male" value="Male" />
+              <Picker.Item style={styles.pickerItem} label=": Female" value="Female" />
+              <Picker.Item style={styles.pickerItem} label=": Others" value="NA" />
             </Picker> }
 
             </View>
             <View style={styles.container}>
+            <Text style={styles.text}>Mobile</Text> 
             <Field width="100%"
+            value={`: ${(Data.Umobile)}`}
              editable={true}
             keyboardType="numeric"
          placeholder="Mobile Number" 
@@ -206,38 +225,42 @@ const removeProfile = ()=>{
             />
             </View>
 
-            <DateTimePickerModal
-             style={styles.datePickerStyle}
-              isVisible={isDatePickerVisible}
-              mode="date"
-              maximumDate={date}
-              onConfirm={handleConfirm}
-              onCancel={hideDatePicker}
-              
-            />
-
+          
+            {showDatePicker && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          maximumDate={today}
+          value={date}
+          mode="date"
+          is24Hour={false}
+          display="default"
+          onChange={onChange}
+        />
+      )}
          <View style={styles.container}>
-                   <View style={styles.container1}>
+         
+         <Text style={styles.text}>DOB</Text>
                    <Field 
-                   
-                value=  {selectedDate != '' ? (selectedDate.toString() +'/'+ month.toString() + '/' + year.toString()):""}
-                placeholder="DOB"
-                width="80%"
-              onChangeText={(value)=>setDob(value)}
+                   value= {`: ${(Data.UDoB)}`}
+                placeholder={"DOB"}
+              width="57%"
+             
                 />
                    
                 <Ionicons.Button
                     name="calendar"
                     color='black'
-                    onPress={showDatePicker}
+                    onPress={showDatepicker}
                     backgroundColor={background}
                   
                     />
-                    </View>
+                    
 
-            </View>
+         </View>
             <View style={styles.container}>
+            <Text style={styles.text}>Adress 1</Text> 
             <Field width="100%"
+             value= {`: ${(Data.UAddr1)}`}
              editable={true}
             placeholder="Address line 1" 
             multiline={true}
@@ -247,7 +270,9 @@ const removeProfile = ()=>{
 
             </View>
             <View style={styles.container}>
+            <Text style={styles.text}>Adress 1</Text>  
             <Field width="100%"
+             value= {`: ${(Data.UAddr2)}`}
              editable={true}
             placeholder="Address line 2" 
             multiline={true}
@@ -257,7 +282,9 @@ const removeProfile = ()=>{
 
             </View>
             <View style={styles.container}>
+            <Text style={styles.text}>City</Text>   
             <Field width="100%"
+             value= {`: ${(Data.Ucity)}`}
              editable={true}
             placeholder="City" 
            
@@ -267,7 +294,9 @@ const removeProfile = ()=>{
 
             </View>
             <View style={styles.container}>
+            <Text style={styles.text}>Pincode</Text>   
             <Field width="100%"
+             value= {`: ${(Data.UPinCode)}`}
              editable={true}
             placeholder="Pin-Code" 
            keyboardType='numeric'
@@ -277,7 +306,9 @@ const removeProfile = ()=>{
 
             </View>
             <View style={styles.container}>
+            <Text style={styles.text}>Aadhar</Text>   
             <Field width="100%"
+              value= {`: ${(Data.Uaadhar)}`}
              editable={true}
             keyboardType="numeric"
          placeholder="Aadhar Number" 
@@ -292,7 +323,7 @@ const removeProfile = ()=>{
            <Btn
             textColor="white"
             bgColor={btnColor}
-            btnLabel="Save"
+            btnLabel="Edit"
             Press={onPressHandler}
             />
             
@@ -317,6 +348,10 @@ const styles = StyleSheet.create({
        marginTop: 20,
           
       
+      },
+      text:{
+        fontSize:12,
+        width:70
       },
       container:{
         
@@ -365,9 +400,9 @@ const styles = StyleSheet.create({
     picker: {
       
       alignSelf:'center',
-      width: "100%",
+      width: "70%",
       height:40,
- 
+      
  
    
       
