@@ -51,6 +51,8 @@ import AssetTicketReport from './screenChecker/AssetTicketReport';
 import ValidateTicketChecker from './screenChecker/ValidateTicketChecker';
 import TicketScreen from './ConductorScreens/TicketScreen';
 import ChangePasswordConductor from './ConductorScreens/ChangePasswordConductor';
+import { ProfileApi } from './Screens/Api';
+import EditProfile from './Screens/EditProfile';
 
 
 
@@ -164,8 +166,10 @@ function DrawerNavigator() {
   );
 }
 
-function TabNavigator() {
-
+function TabNavigator({route}) {
+const data = route.params.userData;
+ StackNavigator(data);
+console.log('tab data',data);
   return (
     <Tab.Navigator
    
@@ -239,8 +243,10 @@ function TabNavigator() {
   );
 }
 
-function StackNavigator () {
-
+function StackNavigator (data) {
+ 
+  const userData = data;
+  console.log('stack show',userData);
   useEffect(() => {
     
 
@@ -267,13 +273,12 @@ function StackNavigator () {
   
   const Stack = createStackNavigator();
   const navigation = useNavigation();
-  const onPressHandler = () => {
-    navigation.navigate('Userregistration');
- }
+  
 
  
   return(
-    <Stack.Navigator
+    <Stack.Navigator 
+    
     initialRouteName='Login'
      screenOptions={{
       headerShown:true,
@@ -292,22 +297,35 @@ function StackNavigator () {
         name="tab"
         component={TabNavigator}
 
-        options={{title:'Lekpay',
-      
-       headerStyle: {
+        options={({route,navigation})=>({
+          title:'Lekpay',
+         headerStyle: {
         backgroundColor: '#C80088',
         
       },
-       
+      
        headerLeft: () => (
         
           <View style={{backgroundColor:'pink',justifyContent:'center',alignItems:'center',marginLeft:10,padding:5,borderRadius:20}}>
+           {console.log("data....",route.params.userData)
+           
+           }
+           
            <Ionicons
              //style={{paddingLeft: 10}}
              name= 'person-outline'
              size={25}
              color='#ffffff'
-             onPress={onPressHandler}
+             onPress={async()=>{
+              await ProfileApi({
+                "flag":route.params.userData.Flag,
+                  "id":route.params.userData.AuthID
+              })
+              .then(res=>{navigation.navigate('Userregistration',{data:(res.data)})})
+              .catch(error=>{console.log(error)
+              alert(error)})
+              console.log("data....1",route.params.userData.AuthID);
+              }}
            />
          </View>
        ),
@@ -355,7 +373,7 @@ function StackNavigator () {
       ),
 
      
-      }}
+      })}
         />
       <Stack.Screen 
        name="Qrscanner"
@@ -367,18 +385,18 @@ function StackNavigator () {
         
       },
        
-       headerLeft: () => (
+      //  headerLeft: () => (
         
-          <View style={{backgroundColor:'pink',justifyContent:'center',alignItems:'center',marginLeft:10,padding:5,borderRadius:20}}>
-           <Ionicons
-             //style={{paddingLeft: 10}}
-             name= 'person-outline'
-             size={40}
-             color='#ffffff'
-             onPress={onPressHandler}
-           />
-         </View>
-       ),
+      //     <View style={{backgroundColor:'pink',justifyContent:'center',alignItems:'center',marginLeft:10,padding:5,borderRadius:20}}>
+      //      <Ionicons
+      //        //style={{paddingLeft: 10}}
+      //        name= 'person-outline'
+      //        size={40}
+      //        color='#ffffff'
+      //        onPress={onPressHandler}
+      //      />
+      //    </View>
+      //  ),
 
       headerRight : () => (
         <View style={{flexDirection:'row'}}>
@@ -423,13 +441,25 @@ function StackNavigator () {
       />
       <Stack.Screen
       name='Scnner'
-      component={Scnner}/>
+      component={Scnner}
+      options={{
+        headerShown: true,
+         title:'Qr Scanner',
+         headerStyle:{
+          backgroundColor: '#C80088'
+        }
+      }}
+      />
       
       <Stack.Screen 
        name='Userregistration'
        component={Userregistration}
        options={{
-         headerShown: false
+         headerShown: true,
+         title:'User Profile',
+         headerStyle:{
+          backgroundColor: '#C80088'
+        }
        }}
       />
 
@@ -550,6 +580,9 @@ function StackNavigator () {
 
      <Stack.Screen options={{headerStyle:{backgroundColor:darkPink}}} name='Check' component={ValidateTicketChecker}/>
      <Stack.Screen options={{headerStyle:{backgroundColor:darkPink}}} name='ChangePasswordConductor' component={ChangePasswordConductor}/>
+     <Stack.Screen options={{headerStyle:{backgroundColor:darkPink}}} name='Edit Profile' component={EditProfile}/>
+     
+     
      </Stack.Navigator>
   )
 }
